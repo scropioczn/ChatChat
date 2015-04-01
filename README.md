@@ -1,2 +1,2 @@
 # ChatChat
-An iOS chat app using AWS as backend server.
+An iOS chat app using mongoDB as backend server.

@@ -36,7 +36,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func toSignIn(sender: UIButton) {
         // query for sign in credidential
-        if (self.existLabel.hidden == false) && (passwordInput.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+        if (self.existLabel.hidden == false) && (passwordInput.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) && (self.existLabel.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
             // checked validation, query starts
             
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -46,7 +46,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             let checkSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
             
             let checkTask = checkSession.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
-                let str:String? = url.absoluteString
+                let data = NSData(contentsOfURL: url)
+                
+                let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
@@ -62,8 +64,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                         
                         alert.addAction(ok)
                         
-                        self.presentViewController(alert, animated: true, completion: { () -> Void in
-                            
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.presentViewController(alert, animated: true, completion: { () -> Void in
+                                
+                            })
                         })
                     }
                 }
@@ -81,8 +85,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             alert.addAction(ok)
             
             self.presentViewController(alert, animated: true, completion: { () -> Void in
-                
+                    
             })
+            
         }
     
         
@@ -90,7 +95,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func toRegister(sender: UIButton) {
         // check all fields 
-        if (self.existLabel.hidden == true) && (self.passwordInput.text!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+        if (self.existLabel.hidden == true) && (self.passwordInput.text!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) && (self.existLabel.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
             // query for registration
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             
@@ -99,12 +104,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             let checkSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
             
             let checkTask = checkSession.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
-                let str:String? = url.absoluteString
+                let data = NSData(contentsOfURL: url)
+                
+                let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
                 if str != nil {
-                    if str! == "yes" {
+                    if str! == "no" { // I accidentally mistaken this (change it after correct node.js
                         self.performSegueWithIdentifier("backToContacts", sender: self)
                     } else {
                         let alert = UIAlertController(title: "Error", message: "Registration falied, please try again", preferredStyle: UIAlertControllerStyle.Alert)
@@ -115,8 +122,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                         
                         alert.addAction(ok)
                         
-                        self.presentViewController(alert, animated: true, completion: { () -> Void in
-                            
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.presentViewController(alert, animated: true, completion: { () -> Void in
+                                
+                            })
                         })
                     }
                 }
@@ -139,6 +148,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         if textField.placeholder == "user ID" {
             // check account name availability
             self.accountAvaiInd.hidden = false
+            self.accountAvaiInd.startAnimating()
             self.existLabel.hidden = true
             
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -148,17 +158,29 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             let checkSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
             
             let checkTask = checkSession.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
-                let str:String? = url.absoluteString
+                if err != nil {
+                    println(err)
+                }
+                let data = NSData(contentsOfURL: url)
+                
+                let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                self.accountAvaiInd.hidden = true
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.accountAvaiInd.stopAnimating()
+                    self.accountAvaiInd.hidden = true
+                })
                 
                 if str != nil {
                     if str! == "yes" {
                         // available
                         
                     } else {
-                        self.existLabel.hidden = false
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.existLabel.hidden = false
+                        })
+                        
                     }
                 }
             })

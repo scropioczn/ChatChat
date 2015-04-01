@@ -10,15 +10,19 @@ import Foundation
 
 class ChatchatFetcher {
     class func urlForSignIn(id:String, password:String) -> NSURL {
-        return NSURL(string: String(format: "ec2-52-11-217-88.us-west-2.compute.amazonaws.com/login?id=%@&password=%@", arguments: [id, password]))!
+        return NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/login?id=%@&password=%@", id, password))!
     }
     
     class func urlForCheck(id:String) -> NSURL {
-        return NSURL(string: String(format: "ec2-52-11-217-88.us-west-2.compute.amazonaws.com/check_account?id=%@", arguments: [id]))!
+        let url = NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/check_account?id=%@", id))!
+        
+        return url
     }
     
     class func urlForRegister(id:String, password:String) -> NSURL {
-        return NSURL(string: String(format: "ec2-52-11-217-88.us-west-2.compute.amazonaws.com/register?id=%@&password=%@", arguments: [id, password]))!
+        let url =  NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/account?id=%@&password=%@", id, password))!
+        
+        return url
     }
     
 }
