@@ -33,9 +33,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="eNv-JB-voJ" kind="show" identifier="toConversation" id="ri3-Kh-b5b"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -44,15 +41,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Friends" id="myc-1O-YfH">
-                        <barButtonItem key="leftBarButtonItem" id="TFY-JX-ajN">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AOn-kt-JBe">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Sign Out">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" title="Sign Out" id="Yvl-WO-vJ0"/>
                         <barButtonItem key="rightBarButtonItem" id="p37-Fd-aZd">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="OrH-Xb-7C9">
                                 <rect key="frame" x="451" y="7" width="22" height="22"/>
@@ -65,20 +54,50 @@
                     </navigationItem>
                     <connections>
                         <segue destination="o7p-ey-2kR" kind="presentation" identifier="toSignIn" id="sOi-RJ-b9E"/>
+                        <segue destination="eNv-JB-voJ" kind="show" identifier="toConversation" id="7fs-Bp-pT8"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rzy-TU-Q5P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1560" y="562"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Title-->
         <scene sceneID="gJC-Jp-PKx">
             <objects>
-                <tableViewController id="eNv-JB-voJ" sceneMemberID="viewController">
+                <tableViewController id="eNv-JB-voJ" customClass="ConversationTableViewController" customModule="Chatchat" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9al-JU-Wl1">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="0Fk-YK-4ui">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <items>
+                                <barButtonItem style="plain" id="rWF-8G-VQD">
+                                    <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="nIq-4x-wck">
+                                        <rect key="frame" x="16" y="7" width="244" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="send"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="eNv-JB-voJ" id="8E0-Lz-oGs"/>
+                                        </connections>
+                                    </textField>
+                                </barButtonItem>
+                                <barButtonItem style="plain" id="t9c-Yf-P4v">
+                                    <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="07v-9H-xrU">
+                                        <rect key="frame" x="508" y="7" width="36" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Send">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="send:" destination="eNv-JB-voJ" eventType="touchUpInside" id="cdk-6F-Ldt"/>
+                                        </connections>
+                                    </button>
+                                </barButtonItem>
+                            </items>
+                        </toolbar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="userConvCell" id="qNC-TL-3iQ" customClass="UserConvTableViewCell" customModule="Chatchat" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -105,8 +124,12 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="ch4-YZ-3mw" secondAttribute="bottom" constant="-8" id="38j-ey-3zc"/>
-                                        <constraint firstItem="Zaj-Nx-OJK" firstAttribute="top" secondItem="u6J-zz-sxH" secondAttribute="topMargin" id="KnZ-he-I6Y"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="ch4-YZ-3mw" secondAttribute="bottom" constant="-8" id="38j-ey-3zc">
+                                            <variation key="widthClass=compact" constant="0.0"/>
+                                        </constraint>
+                                        <constraint firstItem="Zaj-Nx-OJK" firstAttribute="top" secondItem="u6J-zz-sxH" secondAttribute="topMargin" id="KnZ-he-I6Y">
+                                            <variation key="widthClass=compact" constant="-8"/>
+                                        </constraint>
                                         <constraint firstItem="Zaj-Nx-OJK" firstAttribute="leading" secondItem="u6J-zz-sxH" secondAttribute="leadingMargin" id="YWW-hc-6du"/>
                                         <constraint firstAttribute="centerY" secondItem="omF-hH-t1a" secondAttribute="centerY" id="hzI-ZE-Ibd"/>
                                         <constraint firstItem="omF-hH-t1a" firstAttribute="trailing" secondItem="u6J-zz-sxH" secondAttribute="trailingMargin" id="oFy-iX-5q1"/>
@@ -115,9 +138,10 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="conversation" destination="Zaj-Nx-OJK" id="IyN-LI-d1y"/>
+                                    <outlet property="timeStamp" destination="ch4-YZ-3mw" id="djF-wp-mXK"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="targetConvCell" id="lfV-yb-2p4">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="targetConvCell" id="lfV-yb-2p4" customClass="TargetConvTableViewCell" customModule="Chatchat" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lfV-yb-2p4" id="oiQ-KZ-91c">
@@ -151,6 +175,11 @@
                                         <constraint firstItem="eHV-eu-7DG" firstAttribute="top" secondItem="oiQ-KZ-91c" secondAttribute="topMargin" id="gwy-DB-KQP"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="targetConv" destination="eHV-eu-7DG" id="J6s-v5-fQO"/>
+                                    <outlet property="targetID" destination="n5E-8d-h9a" id="0hV-Il-Ifb"/>
+                                    <outlet property="targetTime" destination="KwD-gj-T33" id="OM6-Np-E2b"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -158,10 +187,20 @@
                             <outlet property="delegate" destination="eNv-JB-voJ" id="kwe-e4-99m"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="VJs-Cm-I3D">
+                        <barButtonItem key="rightBarButtonItem" title="Refresh" id="oWb-ld-xuS">
+                            <connections>
+                                <action selector="getPendingMessages:" destination="eNv-JB-voJ" id="yK0-Ug-YiC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="messageInput" destination="nIq-4x-wck" id="slE-x9-lqu"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8kg-NP-OJR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2260" y="565"/>
+            <point key="canvasLocation" x="2364" y="574.5"/>
         </scene>
         <!--Sign In View Controller-->
         <scene sceneID="OFe-Oi-BwC">

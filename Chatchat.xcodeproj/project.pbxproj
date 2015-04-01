@@ -16,8 +16,6 @@
 		C96DD6DA1ACBBB1F00165576 /* UserConvTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6D91ACBBB1F00165576 /* UserConvTableViewCell.swift */; };
 		C96DD6DC1ACBC01F00165576 /* ContactsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6DB1ACBC01F00165576 /* ContactsTableViewController.swift */; };
 		C96DD6DF1ACBC1CA00165576 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96DD6DE1ACBC1CA00165576 /* CoreData.framework */; };
-		C96DD6E51ACBC52B00165576 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6E41ACBC52B00165576 /* Account.swift */; };
-		C96DD6E81ACBC56800165576 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6E71ACBC56800165576 /* Message.swift */; };
 		C96DD6EA1ACBC5D000165576 /* Message+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6E91ACBC5D000165576 /* Message+Create.swift */; };
 		C96DD6EC1ACBD18B00165576 /* Account+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6EB1ACBD18B00165576 /* Account+Create.swift */; };
 		C96DD6EE1ACBD4E600165576 /* Contact+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6ED1ACBD4E600165576 /* Contact+Create.swift */; };
@@ -25,6 +23,9 @@
 		C96DD6F61ACBDB6000165576 /* ConversationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6F51ACBDB6000165576 /* ConversationTableViewController.swift */; };
 		C96DD6F81ACBDF4A00165576 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6F71ACBDF4A00165576 /* SignInViewController.swift */; };
 		C96DD6FA1ACBE21C00165576 /* ChatchatFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6F91ACBE21C00165576 /* ChatchatFetcher.swift */; };
+		C96DD6FC1ACC0B9F00165576 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FB1ACC0B9F00165576 /* Message.swift */; };
+		C96DD6FE1ACC0F9000165576 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FD1ACC0F9000165576 /* Account.swift */; };
+		C96DD7001ACC219500165576 /* TargetConvTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +52,6 @@
 		C96DD6D91ACBBB1F00165576 /* UserConvTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConvTableViewCell.swift; sourceTree = "<group>"; };
 		C96DD6DB1ACBC01F00165576 /* ContactsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsTableViewController.swift; sourceTree = "<group>"; };
 		C96DD6DE1ACBC1CA00165576 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		C96DD6E41ACBC52B00165576 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		C96DD6E71ACBC56800165576 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C96DD6E91ACBC5D000165576 /* Message+Create.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+Create.swift"; sourceTree = "<group>"; };
 		C96DD6EB1ACBD18B00165576 /* Account+Create.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Account+Create.swift"; sourceTree = "<group>"; };
 		C96DD6ED1ACBD4E600165576 /* Contact+Create.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Contact+Create.swift"; sourceTree = "<group>"; };
@@ -60,6 +59,9 @@
 		C96DD6F51ACBDB6000165576 /* ConversationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationTableViewController.swift; sourceTree = "<group>"; };
 		C96DD6F71ACBDF4A00165576 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C96DD6F91ACBE21C00165576 /* ChatchatFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatchatFetcher.swift; sourceTree = "<group>"; };
+		C96DD6FB1ACC0B9F00165576 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		C96DD6FD1ACC0F9000165576 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetConvTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				C96DD6B61ACB535E00165576 /* AppDelegate.swift */,
 				C96DD6BD1ACB535E00165576 /* Main.storyboard */,
 				C96DD6D91ACBBB1F00165576 /* UserConvTableViewCell.swift */,
+				C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */,
 				C96DD6C01ACB535E00165576 /* Images.xcassets */,
 				C96DD6C21ACB535E00165576 /* LaunchScreen.xib */,
 				C96DD6B81ACB535E00165576 /* Chatchat.xcdatamodeld */,
@@ -155,12 +158,12 @@
 		C96DD6E61ACBC53100165576 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C96DD6FD1ACC0F9000165576 /* Account.swift */,
 				C96DD6F11ACBD73B00165576 /* Contact.swift */,
-				C96DD6E71ACBC56800165576 /* Message.swift */,
 				C96DD6E91ACBC5D000165576 /* Message+Create.swift */,
 				C96DD6EB1ACBD18B00165576 /* Account+Create.swift */,
 				C96DD6ED1ACBD4E600165576 /* Contact+Create.swift */,
-				C96DD6E41ACBC52B00165576 /* Account.swift */,
+				C96DD6FB1ACC0B9F00165576 /* Message.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -267,18 +270,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				C96DD6B71ACB535E00165576 /* AppDelegate.swift in Sources */,
+				C96DD6FE1ACC0F9000165576 /* Account.swift in Sources */,
 				C96DD6EC1ACBD18B00165576 /* Account+Create.swift in Sources */,
 				C96DD6F21ACBD73B00165576 /* Contact.swift in Sources */,
 				C96DD6DC1ACBC01F00165576 /* ContactsTableViewController.swift in Sources */,
 				C96DD6EA1ACBC5D000165576 /* Message+Create.swift in Sources */,
 				C96DD6F61ACBDB6000165576 /* ConversationTableViewController.swift in Sources */,
 				C96DD6DA1ACBBB1F00165576 /* UserConvTableViewCell.swift in Sources */,
+				C96DD7001ACC219500165576 /* TargetConvTableViewCell.swift in Sources */,
 				C96DD6FA1ACBE21C00165576 /* ChatchatFetcher.swift in Sources */,
 				C96DD6EE1ACBD4E600165576 /* Contact+Create.swift in Sources */,
+				C96DD6FC1ACC0B9F00165576 /* Message.swift in Sources */,
 				C96DD6F81ACBDF4A00165576 /* SignInViewController.swift in Sources */,
 				C96DD6BA1ACB535E00165576 /* Chatchat.xcdatamodeld in Sources */,
-				C96DD6E51ACBC52B00165576 /* Account.swift in Sources */,
-				C96DD6E81ACBC56800165576 /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +482,7 @@
 				C96DD6D51ACB535E00165576 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C96DD6D61ACB535E00165576 /* Build configuration list for PBXNativeTarget "ChatchatTests" */ = {
 			isa = XCConfigurationList;
@@ -486,6 +491,7 @@
 				C96DD6D81ACB535E00165576 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

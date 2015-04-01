@@ -37,7 +37,61 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         if user == nil {
             self.performSegueWithIdentifier("toSignIn", sender: self)
         } else {
+            // look through coredata
             self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
+            
+            // query from database
+            let request = NSURLRequest(URL: ChatchatFetcher.urlForGetContacts(self.user!.id))
+            
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+            
+            let task = session.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
+                if url == nil {
+                    println(err)
+                } else {
+                    let data = NSData(contentsOfURL: url)
+                    
+                    var errr:NSError?
+                    
+                    let info:AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &errr)
+                    
+                    if let usr = info as? NSArray {
+                        if let usr1 = usr[0] as? NSDictionary {
+                            if let cons = usr1["contacts"] as? NSArray {
+                                for con in cons {
+                                    if let co = con as? NSDictionary {
+                                        if let cid = co["cid"] as? NSString {
+                                            Contact.createContact(self.user!.id, cid: cid, inContext: self.context!)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    
+                    if let moc = self.context {
+                        var error: NSError? = nil
+                        if moc.hasChanges && !moc.save(&error) {
+                            // Replace this implementation with code to handle the error appropriately.
+                            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                            NSLog("Unresolved error \(error), \(error!.userInfo)")
+                            abort()
+                        }
+                    }
+                    
+                    // reload contacts after done
+                    self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.tableView.reloadData()
+                    })
+                    
+                }
+            })
+            
+            task.resume()
+
         }
     }
 
@@ -126,6 +180,10 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         
         self.user = Account.createAccount(source.idInput.text, inContext: self.context!)
         
+        if self.user == nil {
+            self.user = Account.getAccount(source.idInput.text, inContext: self.context!)
+        }
+        
         if let moc = self.context {
             var error: NSError? = nil
             if moc.hasChanges && !moc.save(&error) {
@@ -144,12 +202,13 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
         if segue.identifier == "toConversation" {
-            let contact = sender as Contact!
-            
-            let destnation = segue.destinationViewController as ConversationTableViewController
-            
-            destnation.target = contact
-            destnation.user = self.user
+            if let contact = sender as? Contact {
+                let destnation = segue.destinationViewController as ConversationTableViewController
+                
+                destnation.target = contact
+                destnation.user = self.user
+                destnation.context = self.context
+            }
             
             
         } else if segue.identifier == "toSignIn" {

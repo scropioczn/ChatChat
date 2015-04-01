@@ -18,7 +18,7 @@ extension Contact {
         
         let request = NSFetchRequest(entityName: "Contact")
         request.predicate = NSPredicate(format: "(cid LIKE %@) AND (isFriend.id LIKE %@)", argumentArray: [cid, id])
-        request.sortDescriptors = [NSSortDescriptor(key: "cid", ascending: true, selector: Selector("localizedStandardCompare"))]
+        request.sortDescriptors = [NSSortDescriptor(key: "cid", ascending: true)]
         
         var err:NSError?
         
@@ -41,7 +41,7 @@ extension Contact {
         
         let request = NSFetchRequest(entityName: "Contact")
         request.predicate = NSPredicate(format: "isFriend.id LIKE %@", argumentArray: [id])
-        request.sortDescriptors = [NSSortDescriptor(key: "cid", ascending: true, selector: Selector("localizedStandardCompare"))]
+        request.sortDescriptors = [NSSortDescriptor(key: "cid", ascending: true)]
         
         var err:NSError?
         
@@ -62,7 +62,7 @@ extension Contact {
         
         let request = NSFetchRequest(entityName: "Contact")
         request.predicate = NSPredicate(format: "(cid LIKE %@) AND (isFriend.id LIKE %@)", argumentArray: [cid, id])
-        request.sortDescriptors = [NSSortDescriptor(key: "cid", ascending: true, selector: Selector("localizedStandardCompare"))]
+        request.sortDescriptors = [NSSortDescriptor(key: "cid", ascending: true)]
         
         var err:NSError?
         

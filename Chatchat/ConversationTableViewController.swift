@@ -9,11 +9,16 @@
 import UIKit
 import CoreData
 
-class ConversationTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+class ConversationTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     var user:Account?
     var target:Contact?
     
+    var conversations:[Message]?
+    
+    var context:NSManagedObjectContext?
+    
+    @IBOutlet weak var messageInput: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,37 +28,232 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.navigationItem.title = self.target?.cid
+        
+        self.conversations = Message.getMessage(self.user!.id, cid: self.target!.cid, from: 0, max: 30, inContext: self.context!)
+        
+        self.tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func send(sender: UIButton) {
+        if self.messageInput.text!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            // create one new message
+            let currentTime = NSDate()
+            
+            let f = NSDateFormatter()
+            f.dateStyle = NSDateFormatterStyle.FullStyle
+            f.timeStyle = NSDateFormatterStyle.FullStyle
+            
+            let newMessage = Message.createMessage(self.messageInput.text!, id: self.user!.id, cid: self.target!.cid, at: currentTime, from: true, inContext: self.context!)
+            
+            if let moc = self.context {
+                var error: NSError? = nil
+                if moc.hasChanges && !moc.save(&error) {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                    abort()
+                }
+            }
+            
+            // send to database
+            let request = NSURLRequest(URL: ChatchatFetcher.urlForSendMessage(self.user!.id, cid: self.target!.cid, content: self.messageInput.text!, time: f.stringFromDate(currentTime)))
+            
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+            
+            let task = session.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
+                
+            })
+            
+            task.resume()
+            
+            self.conversations = Message.getMessage(self.user!.id, cid: self.target!.cid, from: 0, max: 30, inContext: self.context!)
+            
+            self.tableView.reloadData()
+            
+            self.messageInput.text! = ""
+        }
+
+    }
+    
+    // Used to manually receive messages
+    @IBAction func getPendingMessages(sender: UIBarButtonItem) {
+        let request = NSURLRequest(URL: ChatchatFetcher.urlForGetMessages(self.user!.id, cid: self.target!.cid))
+        
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+
+        let task = session.downloadTaskWithRequest(request, completionHandler: { (url, request, err) -> Void in
+            if err != nil {
+                println(err)
+            } else {
+                let data = NSData(contentsOfURL: url)
+                
+                var errr:NSError?
+                
+                let json: AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &errr)
+                
+                
+                
+                if let js = json as? NSArray {
+                    for j in js {
+                        if let mes = j as? NSDictionary {
+                            if let contents = mes["content"] as? String {
+                                if let id = mes["to"] as? String {
+                                    if let cid = mes["from"] as? String {
+                                        if let time = mes["time"] as? String {
+                                            let f = NSDateFormatter()
+                                            
+                                            f.dateStyle = NSDateFormatterStyle.FullStyle
+                                            f.timeStyle = NSDateFormatterStyle.FullStyle
+                                            
+                                            let date = f.dateFromString(time)
+                                            
+                                            let new_message = Message.createMessage(contents, id: id, cid: cid, at: f.dateFromString(time)!, from: false, inContext: self.context!)
+                                            
+                                            
+                                            if let moc = self.context {
+                                                var error: NSError? = nil
+                                                if moc.hasChanges && !moc.save(&error) {
+                                                    // Replace this implementation with code to handle the error appropriately.
+                                                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                                                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                                                    abort()
+                                                }
+                                            }
+                                            
+                                            self.conversations = Message.getMessage(self.user!.id, cid: self.target!.cid, from: 0, max: 30, inContext: self.context!)
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                                self.tableView.reloadData()
+                                            })
+                                            
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Potentially incomplete method implementation.
         // Return the number of sections.
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return 0
+        
+        return self.conversations!.count
     }
 
     
-    
-    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
+        
+        // get current message, in reverse order
+        let num:Int = self.conversations!.count
+        
+        let index = num - 1 - indexPath.row
+        
+        let message = self.conversations![index]
+        
+        if message.from == NSNumber(bool: true) {
+            let cell = tableView.dequeueReusableCellWithIdentifier("userConvCell", forIndexPath: indexPath) as UserConvTableViewCell
+            
+            let f = NSDateFormatter()
+            f.dateStyle = NSDateFormatterStyle.ShortStyle
+            f.timeStyle = NSDateFormatterStyle.ShortStyle
+            
+            cell.conversation.text = message.content
+            println(message.time)
+            println(f.stringFromDate(message.time))
+            cell.timeStamp.text = f.stringFromDate(message.time)
+            
+            
+            return cell
+            
+        } else {
+            let cell = tableView.dequeueReusableCellWithIdentifier("targetConvCell", forIndexPath: indexPath) as TargetConvTableViewCell
+            
+            let f = NSDateFormatter()
+            f.dateStyle = NSDateFormatterStyle.ShortStyle
+            f.timeStyle = NSDateFormatterStyle.ShortStyle
+            
+            cell.targetConv.text = message.content
+            cell.targetTime.text = f.stringFromDate(message.time)
+            cell.targetID.text = message.invloves.cid
+            
+            
+            return cell
+        }
 
-        // Configure the cell...
 
-        return cell
     }
-    */
+    
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField.isFirstResponder() {
+            textField.resignFirstResponder()
+        }
+        
+        if self.messageInput.text!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            // create one new message
+            let currentTime = NSDate()
+            
+            let f = NSDateFormatter()
+            f.dateStyle = NSDateFormatterStyle.FullStyle
+            f.timeStyle = NSDateFormatterStyle.FullStyle
+            
+            let newMessage = Message.createMessage(self.messageInput.text!, id: self.user!.id, cid: self.target!.cid, at: currentTime, from: true, inContext: self.context!)
+            
+            if let moc = self.context {
+                var error: NSError? = nil
+                if moc.hasChanges && !moc.save(&error) {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                    abort()
+                }
+            }
+            
+            // send to database
+            let request = NSURLRequest(URL: ChatchatFetcher.urlForSendMessage(self.user!.id, cid: self.target!.cid, content: self.messageInput.text!, time: f.stringFromDate(currentTime)))
+            
+            let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+            
+            let task = session.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
+                
+            })
+            
+            task.resume()
+            
+            self.conversations = Message.getMessage(self.user!.id, cid: self.target!.cid, from: 0, max: 30, inContext: self.context!)
+            
+            self.tableView.reloadData()
+            
+            self.messageInput.text! = ""
+        }
+
+        
+        return true
+    }
 
     /*
     // Override to support conditional editing of the table view.

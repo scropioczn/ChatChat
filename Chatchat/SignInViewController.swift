@@ -54,7 +54,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 
                 if str != nil {
                     if str! == "yes" {
-                        self.performSegueWithIdentifier("backToContacts", sender: self)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.performSegueWithIdentifier("backToContacts", sender: self)
+                        })
+                        
                     } else {
                         let alert = UIAlertController(title: "Error", message: "Sign in falied, please try again", preferredStyle: UIAlertControllerStyle.Alert)
                         
@@ -112,7 +115,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 
                 if str != nil {
                     if str! == "no" { // I accidentally mistaken this (change it after correct node.js
-                        self.performSegueWithIdentifier("backToContacts", sender: self)
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.performSegueWithIdentifier("backToContacts", sender: self)
+                        })
+                        
                     } else {
                         let alert = UIAlertController(title: "Error", message: "Registration falied, please try again", preferredStyle: UIAlertControllerStyle.Alert)
                         

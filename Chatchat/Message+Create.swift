@@ -45,8 +45,8 @@ extension Message {
         
         let request:NSFetchRequest = NSFetchRequest(entityName: "Message")
         
-        request.predicate = NSPredicate(format: "belongTo.id LIKE %@", argumentArray: [id])
-        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
+        request.predicate = NSPredicate(format: "(belongTo.id LIKE %@) AND (invloves.cid LIKE %@)", id, cid)
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         
         var err:NSError?
         
@@ -64,7 +64,9 @@ extension Message {
     
     
     // create a new message
-    class func createMessage(content:String, id:String, cid:String, at time:NSDate, inContext context:NSManagedObjectContext) -> Message! {
+    // from = true: the message is from the user
+    // from = false: the message is to the user
+    class func createMessage(content:String, id:String, cid:String, at time:NSDate, from:Bool, inContext context:NSManagedObjectContext) -> Message! {
         var message:Message!
         
         message = NSEntityDescription.insertNewObjectForEntityForName("Message", inManagedObjectContext: context) as Message
@@ -78,6 +80,7 @@ extension Message {
         message.content = content
         message.time = time
         
+        message.from = NSNumber(bool: from)
         
         return message
     }

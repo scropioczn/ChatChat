@@ -17,7 +17,7 @@ extension Account {
         
         let request = NSFetchRequest(entityName: "Account")
         request.predicate = NSPredicate(format: "id LIKE %@", argumentArray: [id])
-        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true, selector: Selector("localizedStandardCompare"))]
+        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
         var err:NSError?
         
@@ -40,15 +40,15 @@ extension Account {
         var account:Account? = nil
         
         let request = NSFetchRequest(entityName: "Account")
-        request.predicate = NSPredicate(format: "id LIKE %@", argumentArray: [id])
-        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true, selector: Selector("localizedStandardCompare"))]
+        request.predicate = NSPredicate(format: "id LIKE %@", id)
+        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
         var err:NSError?
         
         let matches = context.executeFetchRequest(request, error: &err) as [Account]?
         
-        if let match = matches {
-            if match.count == 0 {
+        if matches != nil {
+            if matches!.count == 0 {
                 account = NSEntityDescription.insertNewObjectForEntityForName("Account", inManagedObjectContext: context) as? Account
                 
                 if account != nil {
