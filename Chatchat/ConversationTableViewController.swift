@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ConversationTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+class ConversationTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIScrollViewDelegate {
     
     var user:Account?
     var target:Contact?
@@ -19,6 +19,7 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
     var context:NSManagedObjectContext?
     
     @IBOutlet weak var messageInput: UITextField!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,14 +28,45 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.navigationItem.title = self.target?.cid
+        
+        self.navigationController!.toolbarHidden = false
+        
+        self.navigationItem.title = self.target!.cid
         
         self.conversations = Message.getMessage(self.user!.id, cid: self.target!.cid, from: 0, max: 30, inContext: self.context!)
         
         self.tableView.reloadData()
+        
+        self.retrieveMessage()
+        
+        
+        // retrieve keyboard notification
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if self.conversations != nil {
+            
+            var row: Int!
+            if self.conversations!.count > 0 {
+                row = self.conversations!.count - 1;
+                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            }
+            
+            
+        }
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,6 +110,17 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
             
             self.tableView.reloadData()
             
+            
+            if self.conversations != nil {
+                
+                var row: Int!
+                if self.conversations!.count > 0 {
+                    row = self.conversations!.count - 1;
+                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                }
+
+            }
+            
             self.messageInput.text! = ""
         }
 
@@ -85,10 +128,15 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
     
     // Used to manually receive messages
     @IBAction func getPendingMessages(sender: UIBarButtonItem) {
+        self.retrieveMessage()
+    }
+    
+    
+    func retrieveMessage() {
         let request = NSURLRequest(URL: ChatchatFetcher.urlForGetMessages(self.user!.id, cid: self.target!.cid))
         
         let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
-
+        
         let task = session.downloadTaskWithRequest(request, completionHandler: { (url, request, err) -> Void in
             if err != nil {
                 println(err)
@@ -138,7 +186,7 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
                                     }
                                 }
                             }
-
+                            
                         }
                     }
                 }
@@ -147,6 +195,7 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
         
         task.resume()
     }
+    
     
 
     // MARK: - Table view data source
@@ -255,6 +304,10 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
         return true
     }
 
+    @IBAction func beginInput(sender: UITextField) {
+        self.navigationController?.toolbar.frame
+        
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -289,7 +342,83 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
         return true
     }
     */
+    
 
+    // MARK: - Keyboard Notifications
+    
+    func keyboardWillShow(notification: NSNotification) {
+        let info = notification.userInfo as NSDictionary!
+        let value = info.valueForKey(UIKeyboardFrameBeginUserInfoKey) as NSValue
+        let keyBoardFrame = value.CGRectValue() as CGRect
+        
+        let height = keyBoardFrame.height
+        
+        var frame = self.navigationController!.toolbar.frame
+        
+        frame.origin.y -= height
+        
+        self.navigationController!.toolbar.frame = frame
+        
+        var frame1 = self.tableView.frame
+        
+        let new_height = frame1.height - height
+        
+        self.tableView.frame = CGRectMake(frame1.origin.x, frame1.origin.y, frame1.width, new_height)
+        
+        if self.conversations != nil {
+            
+            var row: Int!
+            if self.conversations!.count > 0 {
+                row = self.conversations!.count - 1;
+                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            }
+
+        }
+        
+    }
+    
+    func keyboardDidShow(notification: NSNotification) {
+        
+    }
+    
+    
+    func keyboardWillHide(notification: NSNotification) {
+        let info = notification.userInfo as NSDictionary!
+        let value = info.valueForKey(UIKeyboardFrameBeginUserInfoKey) as NSValue
+        let keyBoardFrame = value.CGRectValue() as CGRect
+        
+        let height = keyBoardFrame.height
+        
+        var frame = self.navigationController!.toolbar.frame
+        
+        frame.origin.y += height
+        
+        self.navigationController!.toolbar.frame = frame
+        
+        var frame1 = self.tableView.frame
+        
+        let new_height = frame1.height + height
+        
+        self.tableView.frame = CGRectMake(frame1.origin.x, frame1.origin.y, frame1.width, new_height)
+        
+        if self.conversations != nil {
+            
+            var row: Int!
+            if self.conversations!.count > 0 {
+                row = self.conversations!.count - 1;
+                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            }
+
+        }
+        
+    }
+    
+    func keyboardDidHide(notification: NSNotification) {
+        
+    }
+    
+    
+    
     
     // MARK: - Navigation
 

@@ -31,68 +31,80 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         self.user = nil
         
         
+        
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         if user == nil {
             self.performSegueWithIdentifier("toSignIn", sender: self)
         } else {
-            // look through coredata
-            self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
-            
-            // query from database
-            let request = NSURLRequest(URL: ChatchatFetcher.urlForGetContacts(self.user!.id))
-            
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
-            
-            let task = session.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
-                if url == nil {
-                    println(err)
-                } else {
-                    let data = NSData(contentsOfURL: url)
-                    
-                    var errr:NSError?
-                    
-                    let info:AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &errr)
-                    
-                    if let usr = info as? NSArray {
-                        if let usr1 = usr[0] as? NSDictionary {
-                            if let cons = usr1["contacts"] as? NSArray {
-                                for con in cons {
-                                    if let co = con as? NSDictionary {
-                                        if let cid = co["cid"] as? NSString {
-                                            Contact.createContact(self.user!.id, cid: cid, inContext: self.context!)
-                                        }
+            self.loadContacts()
+        }
+        self.navigationController!.toolbarHidden = true
+    }
+    
+    func loadContacts() {
+        // look through coredata
+        self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
+        
+        // query from database
+        let request = NSURLRequest(URL: ChatchatFetcher.urlForGetContacts(self.user!.id))
+        
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+        
+        let task = session.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
+            if url == nil {
+                println(err)
+            } else {
+                let data = NSData(contentsOfURL: url)
+                
+                var errr:NSError?
+                
+                let info:AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &errr)
+                
+                if let usr = info as? NSArray {
+                    if let usr1 = usr[0] as? NSDictionary {
+                        if let cons = usr1["contacts"] as? NSArray {
+                            for con in cons {
+                                if let co = con as? NSDictionary {
+                                    if let cid = co["cid"] as? NSString {
+                                        Contact.createContact(self.user!.id, cid: cid, inContext: self.context!)
                                     }
                                 }
                             }
                         }
                     }
-                    
-                    
-                    if let moc = self.context {
-                        var error: NSError? = nil
-                        if moc.hasChanges && !moc.save(&error) {
-                            // Replace this implementation with code to handle the error appropriately.
-                            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                            NSLog("Unresolved error \(error), \(error!.userInfo)")
-                            abort()
-                        }
-                    }
-                    
-                    // reload contacts after done
-                    self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.tableView.reloadData()
-                    })
-                    
                 }
-            })
-            
-            task.resume()
+                
+                
+                if let moc = self.context {
+                    var error: NSError? = nil
+                    if moc.hasChanges && !moc.save(&error) {
+                        // Replace this implementation with code to handle the error appropriately.
+                        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                        NSLog("Unresolved error \(error), \(error!.userInfo)")
+                        abort()
+                    }
+                }
+                
+                // reload contacts after done
+                self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.tableView.reloadData()
+                })
+                
+            }
+        })
+        
+        task.resume()
+        
 
-        }
+    }
+    
+    @IBAction func signOut(sender: UIBarButtonItem) {
+        self.performSegueWithIdentifier("toSignIn", sender: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -195,6 +207,20 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         }
     }
     
+    @IBAction func doneAddingContact(segue:UIStoryboardSegue) {
+        let source = segue.sourceViewController as AddContactViewController
+        
+        self.user = source.user
+        self.context = source.context
+    }
+    
+    @IBAction func cancelAddingContact(segue:UIStoryboardSegue) {
+        let source = segue.sourceViewController as AddContactViewController
+        
+        self.user = source.user
+        self.context = source.context
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -214,6 +240,13 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         } else if segue.identifier == "toSignIn" {
             let destination = segue.destinationViewController as SignInViewController
             
+            destination.context = self.context
+            
+            self.user = nil
+        } else if segue.identifier == "toAddContact" {
+            let destination = segue.destinationViewController as AddContactViewController
+            
+            destination.user = self.user
             destination.context = self.context
         }
         

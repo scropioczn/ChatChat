@@ -48,7 +48,9 @@ extension Contact {
         let matches = context.executeFetchRequest(request, error: &err) as [Contact]?
         
         if matches != nil {
-            contacts = matches
+            if matches!.count > 0 {
+                contacts = matches!
+            }
         } else {
             println(err)
         }

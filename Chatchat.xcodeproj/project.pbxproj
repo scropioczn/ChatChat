@@ -26,6 +26,7 @@
 		C96DD6FC1ACC0B9F00165576 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FB1ACC0B9F00165576 /* Message.swift */; };
 		C96DD6FE1ACC0F9000165576 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FD1ACC0F9000165576 /* Account.swift */; };
 		C96DD7001ACC219500165576 /* TargetConvTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */; };
+		C99C339F1ACE4933004A7F6E /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C339E1ACE4933004A7F6E /* AddContactViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		C96DD6FB1ACC0B9F00165576 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C96DD6FD1ACC0F9000165576 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetConvTableViewCell.swift; sourceTree = "<group>"; };
+		C99C339E1ACE4933004A7F6E /* AddContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 		C96DD6DD1ACBC02800165576 /* VCs */ = {
 			isa = PBXGroup;
 			children = (
+				C99C339E1ACE4933004A7F6E /* AddContactViewController.swift */,
 				C96DD6F71ACBDF4A00165576 /* SignInViewController.swift */,
 				C96DD6F51ACBDB6000165576 /* ConversationTableViewController.swift */,
 				C96DD6DB1ACBC01F00165576 /* ContactsTableViewController.swift */,
@@ -269,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C99C339F1ACE4933004A7F6E /* AddContactViewController.swift in Sources */,
 				C96DD6B71ACB535E00165576 /* AppDelegate.swift in Sources */,
 				C96DD6FE1ACC0F9000165576 /* Account.swift in Sources */,
 				C96DD6EC1ACBD18B00165576 /* Account+Create.swift in Sources */,

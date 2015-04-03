@@ -9,22 +9,27 @@
 import Foundation
 
 class ChatchatFetcher {
+    
+    // sign in
     class func urlForSignIn(id:String, password:String) -> NSURL {
         return NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/login?id=%@&password=%@", id, password))!
     }
     
+    // check account availability
     class func urlForCheck(id:String) -> NSURL {
         let url = NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/check_account?id=%@", id))!
         
         return url
     }
     
+    // register an account
     class func urlForRegister(id:String, password:String) -> NSURL {
         let url =  NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/account?id=%@&password=%@", id, password))!
         
         return url
     }
     
+    // get contacts of current user
     class func urlForGetContacts(id:String) ->NSURL {
         return NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/get_contacts?id=%@", id))!
     }
@@ -39,6 +44,11 @@ class ChatchatFetcher {
         let url =  NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/send_message?id=%@&cid=%@&content=%@&time=%@", id, cid, content, time).stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)!
         
         return url
+    }
+    
+    // add contact to current user
+    class func urlForAddContact(id:String, cid:String) -> NSURL {
+        return NSURL(string: String(format: "http://ec2-52-11-217-88.us-west-2.compute.amazonaws.com/add_contact?id=%@&cid=%@", id, cid).stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)!
     }
     
 }

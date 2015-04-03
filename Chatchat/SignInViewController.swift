@@ -114,7 +114,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
                 if str != nil {
-                    if str! == "no" { // I accidentally mistaken this (change it after correct node.js
+                    if str! == "yes" { 
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             self.performSegueWithIdentifier("backToContacts", sender: self)
@@ -139,6 +139,36 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             })
             
             checkTask.resume()
+        } else if self.existLabel.hidden == false {
+            let warn = UIAlertController(title: "Error", message: "Account already exists", preferredStyle: UIAlertControllerStyle.Alert)
+            
+            warn.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                
+            }))
+            
+            self.presentViewController(warn, animated: true, completion: { () -> Void in
+                
+            })
+        } else if (self.existLabel.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+            let warn = UIAlertController(title: "Error", message: "ID is empty", preferredStyle: UIAlertControllerStyle.Alert)
+            
+            warn.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                
+            }))
+            
+            self.presentViewController(warn, animated: true, completion: { () -> Void in
+                
+            })
+        } else if (self.passwordInput.text!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+            let warn = UIAlertController(title: "Error", message: "password is empty", preferredStyle: UIAlertControllerStyle.Alert)
+            
+            warn.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                
+            }))
+            
+            self.presentViewController(warn, animated: true, completion: { () -> Void in
+                
+            })
         }
     }
     
@@ -150,52 +180,63 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    @IBAction func changeID(sender: UITextField) {
+        self.checkAccountAvailability()
+    }
+    
     func textFieldDidEndEditing(textField: UITextField) {
         // identify the first box
         if textField.placeholder == "user ID" {
-            // check account name availability
-            self.accountAvaiInd.hidden = false
-            self.accountAvaiInd.startAnimating()
-            self.existLabel.hidden = true
-            
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            
-            let request = NSURLRequest(URL: ChatchatFetcher.urlForCheck(self.idInput.text))
-            
-            let checkSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
-            
-            let checkTask = checkSession.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
-                if err != nil {
-                    println(err)
-                }
-                let data = NSData(contentsOfURL: url)
-                
-                let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.accountAvaiInd.stopAnimating()
-                    self.accountAvaiInd.hidden = true
-                })
-                
-                if str != nil {
-                    if str! == "yes" {
-                        // available
-                        
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.existLabel.hidden = false
-                        })
-                        
-                    }
-                }
-            })
-            
-            checkTask.resume()
+            self.checkAccountAvailability()
         }
     }
     
+    func checkAccountAvailability() {
+        // check account name availability
+        self.accountAvaiInd.hidden = false
+        self.accountAvaiInd.startAnimating()
+        self.existLabel.hidden = true
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        let request = NSURLRequest(URL: ChatchatFetcher.urlForCheck(self.idInput.text))
+        
+        let checkSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+        
+        let checkTask = checkSession.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
+            if err != nil {
+                println(err)
+            }
+            let data = NSData(contentsOfURL: url)
+            
+            let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.accountAvaiInd.stopAnimating()
+                self.accountAvaiInd.hidden = true
+            })
+            
+            if str != nil {
+                if str! == "yes" {
+                    // not available
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.existLabel.hidden = false
+                    })
+                    
+                }
+            }
+        })
+        
+        checkTask.resume()
+    }
+    
+    @IBAction func editEnd(sender: UITextField) {
+        self.checkAccountAvailability()
+    }
     /*
     // MARK: - Navigation
 
