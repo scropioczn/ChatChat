@@ -26,6 +26,9 @@ class AddContactViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
         self.addButton.hidden = true
         self.searchButton.hidden = false // search first
     }
@@ -93,6 +96,10 @@ class AddContactViewController: UIViewController, UITextFieldDelegate {
                         warn.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
                             
                         }))
+                        
+                        self.presentViewController(warn, animated: true, completion: { () -> Void in
+                            
+                        })
                     })
                     
                 }

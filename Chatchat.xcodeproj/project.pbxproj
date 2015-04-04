@@ -26,6 +26,8 @@
 		C96DD6FC1ACC0B9F00165576 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FB1ACC0B9F00165576 /* Message.swift */; };
 		C96DD6FE1ACC0F9000165576 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FD1ACC0F9000165576 /* Account.swift */; };
 		C96DD7001ACC219500165576 /* TargetConvTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */; };
+		C97321981ACF272E0034B0DC /* AeroGearPush.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = C97321921ACF26D10034B0DC /* AeroGearPush.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C973219A1ACF27FA0034B0DC /* AeroGearPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97321991ACF27FA0034B0DC /* AeroGearPush.framework */; };
 		C99C339F1ACE4933004A7F6E /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C339E1ACE4933004A7F6E /* AddContactViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +39,42 @@
 			remoteGlobalIDString = C96DD6B01ACB535E00165576;
 			remoteInfo = Chatchat;
 		};
+		C97321911ACF26D10034B0DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C973218C1ACF26D10034B0DC /* AeroGearPush.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6F71353119646266009B26D8;
+			remoteInfo = AeroGearPush;
+		};
+		C97321931ACF26D10034B0DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C973218C1ACF26D10034B0DC /* AeroGearPush.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6F71353C19646266009B26D8;
+			remoteInfo = AeroGearPushTests;
+		};
+		C97321951ACF26D90034B0DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C973218C1ACF26D10034B0DC /* AeroGearPush.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F71353019646266009B26D8;
+			remoteInfo = AeroGearPush;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C97321971ACF27010034B0DC /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C97321981ACF272E0034B0DC /* AeroGearPush.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C96DD6B11ACB535E00165576 /* Chatchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chatchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +100,8 @@
 		C96DD6FB1ACC0B9F00165576 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C96DD6FD1ACC0F9000165576 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		C96DD6FF1ACC219500165576 /* TargetConvTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetConvTableViewCell.swift; sourceTree = "<group>"; };
+		C973218C1ACF26D10034B0DC /* AeroGearPush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AeroGearPush.xcodeproj; path = "Chatchat.xcodeproj/../aerogear-ios-push/AeroGearPush.xcodeproj"; sourceTree = "<group>"; };
+		C97321991ACF27FA0034B0DC /* AeroGearPush.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AeroGearPush.framework; path = "aerogear-ios-push/build/Release-universal/AeroGearPush.framework"; sourceTree = "<group>"; };
 		C99C339E1ACE4933004A7F6E /* AddContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C96DD6DF1ACBC1CA00165576 /* CoreData.framework in Frameworks */,
+				C973219A1ACF27FA0034B0DC /* AeroGearPush.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +128,8 @@
 		C96DD6A81ACB535E00165576 = {
 			isa = PBXGroup;
 			children = (
+				C97321991ACF27FA0034B0DC /* AeroGearPush.framework */,
+				C973218C1ACF26D10034B0DC /* AeroGearPush.xcodeproj */,
 				C96DD6DE1ACBC1CA00165576 /* CoreData.framework */,
 				C96DD6B31ACB535E00165576 /* Chatchat */,
 				C96DD6CC1ACB535E00165576 /* ChatchatTests */,
@@ -171,6 +213,15 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		C973218D1ACF26D10034B0DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C97321921ACF26D10034B0DC /* AeroGearPush.framework */,
+				C97321941ACF26D10034B0DC /* AeroGearPushTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -181,10 +232,12 @@
 				C96DD6AD1ACB535E00165576 /* Sources */,
 				C96DD6AE1ACB535E00165576 /* Frameworks */,
 				C96DD6AF1ACB535E00165576 /* Resources */,
+				C97321971ACF27010034B0DC /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C97321961ACF26D90034B0DC /* PBXTargetDependency */,
 			);
 			name = Chatchat;
 			productName = Chatchat;
@@ -221,6 +274,11 @@
 					C96DD6B01ACB535E00165576 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = NXNXRA4637;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					C96DD6C81ACB535E00165576 = {
 						CreatedOnToolsVersion = 6.2;
@@ -239,6 +297,12 @@
 			mainGroup = C96DD6A81ACB535E00165576;
 			productRefGroup = C96DD6B21ACB535E00165576 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C973218D1ACF26D10034B0DC /* Products */;
+					ProjectRef = C973218C1ACF26D10034B0DC /* AeroGearPush.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C96DD6B01ACB535E00165576 /* Chatchat */,
@@ -246,6 +310,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C97321921ACF26D10034B0DC /* AeroGearPush.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AeroGearPush.framework;
+			remoteRef = C97321911ACF26D10034B0DC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C97321941ACF26D10034B0DC /* AeroGearPushTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AeroGearPushTests.xctest;
+			remoteRef = C97321931ACF26D10034B0DC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C96DD6AF1ACB535E00165576 /* Resources */ = {
@@ -305,6 +386,11 @@
 			isa = PBXTargetDependency;
 			target = C96DD6B01ACB535E00165576 /* Chatchat */;
 			targetProxy = C96DD6CA1ACB535E00165576 /* PBXContainerItemProxy */;
+		};
+		C97321961ACF26D90034B0DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AeroGearPush;
+			targetProxy = C97321951ACF26D90034B0DC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -413,7 +499,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/aerogear-ios-push/build/Release-universal",
+				);
 				INFOPLIST_FILE = Chatchat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -426,7 +517,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/aerogear-ios-push/build/Release-universal",
+				);
 				INFOPLIST_FILE = Chatchat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

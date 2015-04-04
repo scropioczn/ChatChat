@@ -36,12 +36,13 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if user == nil {
             self.performSegueWithIdentifier("toSignIn", sender: self)
         } else {
             self.loadContacts()
         }
-        self.navigationController!.toolbarHidden = true
     }
     
     func loadContacts() {
@@ -54,46 +55,50 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
         let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
         
         let task = session.downloadTaskWithRequest(request, completionHandler: { (url, response, err) -> Void in
-            if url == nil {
+            if err != nil {
                 println(err)
             } else {
-                let data = NSData(contentsOfURL: url)
-                
-                var errr:NSError?
-                
-                let info:AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &errr)
-                
-                if let usr = info as? NSArray {
-                    if let usr1 = usr[0] as? NSDictionary {
-                        if let cons = usr1["contacts"] as? NSArray {
-                            for con in cons {
-                                if let co = con as? NSDictionary {
-                                    if let cid = co["cid"] as? NSString {
-                                        Contact.createContact(self.user!.id, cid: cid, inContext: self.context!)
+                if url != nil {
+                    let data = NSData(contentsOfURL: url)
+                    
+                    var errr:NSError?
+                    
+                    let info:AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &errr)
+                    
+                    if let usr = info as? NSArray {
+                        if let usr1 = usr[0] as? NSDictionary {
+                            if let cons = usr1["contacts"] as? NSArray {
+                                for con in cons {
+                                    if let co = con as? NSDictionary {
+                                        if let cid = co["cid"] as? NSString {
+                                            Contact.createContact(self.user!.id, cid: cid, inContext: self.context!)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-                
-                
-                if let moc = self.context {
-                    var error: NSError? = nil
-                    if moc.hasChanges && !moc.save(&error) {
-                        // Replace this implementation with code to handle the error appropriately.
-                        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                        NSLog("Unresolved error \(error), \(error!.userInfo)")
-                        abort()
+                    
+                    
+                    if let moc = self.context {
+                        var error: NSError? = nil
+                        if moc.hasChanges && !moc.save(&error) {
+                            // Replace this implementation with code to handle the error appropriately.
+                            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                            NSLog("Unresolved error \(error), \(error!.userInfo)")
+                            abort()
+                        }
                     }
+                    
+                    // reload contacts after done
+                    self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.tableView.reloadData()
+                    })
                 }
                 
-                // reload contacts after done
-                self.contacts = Contact.getContactsOf(self.user!.id, inContext: self.context!)
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.tableView.reloadData()
-                })
                 
             }
         })
@@ -147,6 +152,10 @@ class ContactsTableViewController: UITableViewController, UITableViewDelegate, U
 
         let contact = self.contacts![indexPath.row]
         self.performSegueWithIdentifier("toConversation", sender: contact)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as UITableViewCell?
+        if cell != nil {
+            cell?.selected = false
+        }
     }
     
     /*

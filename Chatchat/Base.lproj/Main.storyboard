@@ -20,7 +20,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tRd-kl-nhJ">
                                 <rect key="frame" x="200" y="171" width="200" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
                                 <connections>
                                     <action selector="changeID:" destination="BjF-0I-1gR" eventType="editingChanged" id="rDw-cz-VJU"/>
                                     <outlet property="delegate" destination="BjF-0I-1gR" id="2Ly-TB-nu8"/>

@@ -1,0 +1,3 @@
+[submodule "aerogear-ios-push"]
+	path = aerogear-ios-push
+	url = https://github.com/aerogear/aerogear-ios-push.git

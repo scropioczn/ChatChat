@@ -33,8 +33,8 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
-        self.navigationController!.toolbarHidden = false
         
         self.navigationItem.title = self.target!.cid
         
@@ -55,6 +55,7 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
     }
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         if self.conversations != nil {
             
             var row: Int!
@@ -64,6 +65,21 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
             }
             
             
+        }
+        
+        
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.messageInput.isFirstResponder() {
+            self.messageInput.resignFirstResponder()
+        }
+        
+        if let presenting = self.presentingViewController as? ContactsTableViewController {
+            presenting.context = self.context
+            presenting.user = self.user
         }
         
         
@@ -426,6 +442,7 @@ class ConversationTableViewController: UITableViewController, UITableViewDataSou
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
+        
     }
     
 

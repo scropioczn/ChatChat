@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import AeroGearPush
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+       
+        
+        let notificationSettings = UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert|UIUserNotificationType.Badge|UIUserNotificationType.Sound, categories: nil)
+
+            UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+            UIApplication.sharedApplication().registerForRemoteNotifications()
+
         let naviVC = self.window!.rootViewController! as UINavigationController
         let contactsVC = naviVC.topViewController! as ContactsTableViewController
         
@@ -50,6 +58,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        // setup registration
+        let registration = AGDeviceRegistration(serverURL: NSURL(string: "https://aerogearforchatchat-seniorsnow.rhcloud.com/ag-push/")!)
+        
+        // attemp to register
+        registration.registerWithClientInfo({ (clientInfo: AGClientDeviceInformation!) in
+            // setup configuration
+            clientInfo.deviceToken = deviceToken
+            clientInfo.variantID = "6b38d910-43f1-4b2f-bda6-caac2148c713"
+            clientInfo.variantSecret = "567506db-637f-4dbd-bbf3-c4031addd87e"
+            
+            // apply the token, to identify THIS device
+            let currentDevice = UIDevice()
+            
+            // --optional config--
+            // set some 'useful' hardware information params
+            clientInfo.operatingSystem = currentDevice.systemName
+            clientInfo.osVersion = currentDevice.systemVersion
+            clientInfo.deviceType = currentDevice.model
+            },
+            
+            success: {
+                println("UnifiedPush Server registration succeeded")
+            },
+            failure: {(error: NSError!) in
+                println("failed to register, error: \(error.description)")
+        })
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        
     }
 
     // MARK: - Core Data stack
