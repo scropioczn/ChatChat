@@ -1,12 +1,16 @@
 # ChatChat
 An iOS chat app using mongoDB as backend server.
 
-accounts can be used for testing:
+Fri Apr 3 Update:
 
-id      password
-a1         123
-a2         123
-asd        123
+Fixed minor bugs
 
+Thur Apr 2 Update:
 
-, since contacts cannot be added inside the app for now.
+Added functionalities
+
+1) Add Contact
+
+2) Sign out
+
+Minor bugs fixed 
